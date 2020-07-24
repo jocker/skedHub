@@ -1,0 +1,177 @@
+@import "~@angular/material/theming";
+//MAIN NAV SIDEBAR
+
+::ng-deep {
+
+  app-sidebar {
+
+    overflow: hidden;
+
+    .nav-link {
+      transition: padding-left 200ms ease;
+    }
+
+    &.folded:not(.unfolded) {
+
+      background: red !important;
+
+      .logo-text {
+        opacity: 0;
+        transition: opacity 200ms ease;
+      }
+
+      .nav-link {
+        padding-left: 24px;
+
+        > span {
+          opacity: 0;
+          transition: opacity 200ms ease;
+        }
+      }
+
+      .group-title {
+        align-items: center;
+
+        > span {
+          opacity: 0;
+          transition: opacity 200ms ease;
+        }
+
+        &:before {
+          content: '';
+          display: block;
+          position: absolute;
+          min-width: 1.6rem;
+          border-top: 2px solid;
+          opacity: 0.2;
+          padding-left: 32px;
+        }
+      }
+
+      &.open {
+        .children {
+          display: none !important;
+        }
+      }
+    }
+  }
+
+  app-main-vertical-navbar {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    width: 100%;
+    height: 100%;
+
+    .navbar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      min-height: 64px;
+      padding: 0 16px 0 16px;
+      transition: padding 200ms ease;
+      @include mat-elevation(1);
+
+      .logo {
+        display: flex;
+        align-items: center;
+
+        .logo-icon {
+          width: 38px;
+          height: 38px;
+        }
+
+        .logo-text {
+          margin-left: 8px;
+          font-size: 20px;
+          font-weight: 300;
+          letter-spacing: 0.4px;
+        }
+      }
+    }
+
+    .navbar-content {
+      flex: 1 1 auto;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+  }
+
+}
+
+#main_content {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  z-index: 1;
+  min-width: 0;
+  overflow: hidden;
+
+  ::ng-deep {
+    > *:not(router-outlet) {
+      display: flex;
+      flex: 1 0 auto;
+      overflow: hidden;
+    }
+  }
+}
+
+
+#main_old {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  min-width: 0;
+
+  // Container 1
+  > .container {
+    position: relative;
+    display: flex;
+    flex: 1 1 0%;
+    width: 100%;
+    min-height: 0;
+    min-width: 0;
+
+    // Container 2
+    > .container {
+      position: relative;
+      display: flex;
+      flex: 1 1 0%;
+      flex-direction: column;
+      min-width: 0;
+
+      // Container 3 (Scrollable)
+      > .container {
+        position: relative;
+        display: flex;
+        flex: 1 1 0%;
+        flex-direction: column;
+        overflow-x: hidden;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+
+        // Content component
+        content {
+
+          &.inner-scroll {
+            flex: 1 1 0%;
+            min-height: 0;
+
+            > *:not(router-outlet) {
+              flex: 1 1 0%;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+

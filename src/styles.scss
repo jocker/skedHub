@@ -1,1 +1,28 @@
-/* You can add global styles to this file, and also import other style files */
+// Import Fuse core library
+@import '~@angular/material/theming';
+@import "scss/core";
+
+// Import app.theme.scss
+@import "scss/app.theme";
+
+
+#main_layout {
+  display: flex;
+  flex: 1 1 auto;
+  width: 100%;
+  height: 100%;
+}
+
+#main {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  min-width: 0;
+}
+
+
+

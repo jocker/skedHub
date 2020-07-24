@@ -1,0 +1,47 @@
+// This file meant to be imported only once! Use fuse.scss to access
+// to the core Fuse and Angular Material mixins
+
+// ngx-datatable
+
+// Perfect scrollbar
+@import '~perfect-scrollbar/css/perfect-scrollbar';
+
+// Theme
+@import "theme";
+
+// Include core Angular Material styles
+@include mat-core();
+
+// Partials
+@import "partials/breakpoints";
+@import "partials/normalize";
+@import "partials/scrollbars";
+@import "partials/helpers";
+@import "partials/general";
+@import "partials/icons";
+@import "partials/colors";
+@import "partials/material";
+@import "partials/angular-material-fix";
+@import "partials/typography";
+@import "partials/docs";
+@import "partials/page-layouts";
+@import "partials/cards";
+@import "partials/navigation";
+@import "partials/forms";
+@import "partials/print";
+
+// Plugins
+@import "partials/plugins/plugins";
+
+
+@mixin toolbar-theme($theme) {
+
+  $foreground: map-get($theme, foreground);
+
+  toolbar {
+
+    .toolbar-separator {
+      background: map-get($foreground, divider);
+    }
+  }
+}

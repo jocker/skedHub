@@ -1,0 +1,23 @@
+<app-page-content [scrollContent]="false">
+  <!--
+    <div #timelineEl style="background: red; overflow: auto" id="timeline" >
+  aaaaaaaaaaaaaaa
+    </div>
+
+  -->
+
+
+  <div #scrollViewport class="scroll_viewport" (scroll)="handleScroll($event)">
+    <div class="scroll_content_wrap" style="width: 1000000px; height: 199px; background: green" (wheel)="handleWheel($event)" >
+      <ng-container #cellViewContainer></ng-container>
+    </div>
+  </div>
+
+</app-page-content>
+
+<ng-template #tplHeaderCell let-title="title" let-style="style">
+  <div class="header_cell" style="width: 100px; height:20px" [style]="style">
+    <div class="title">{{title}}</div>
+    <div style="position:absolute; top:100px; left:10px; width:30px; height:20px; background: red"></div>
+  </div>
+</ng-template>

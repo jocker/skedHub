@@ -1,0 +1,20 @@
+<div id="main">
+
+  <app-sidebar name="navbar"
+               [folded]="layoutConfig.navbar.folded"
+               lockedOpen="gt-md"
+               *ngIf="!layoutConfig.navbar.hidden">
+    <app-main-vertical-navbar class="left-navbar"></app-main-vertical-navbar>
+  </app-sidebar>
+
+  <div style="flex:1 1 0; display: flex; flex-direction: column;height: 100%; overflow: hidden">
+    <app-main-toolbar *ngIf="!layoutConfig.toolbar.hidden">
+    </app-main-toolbar>
+    <div id="main_content">
+      <router-outlet></router-outlet>
+    </div>
+    <footer *ngIf="!layoutConfig.footer.hidden">
+      <mat-toolbar></mat-toolbar>
+    </footer>
+  </div>
+</div>

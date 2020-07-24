@@ -1,0 +1,104 @@
+<div class="navbar-header" [ngClass]="layoutConfig.secondaryBackground">
+
+  <div class="logo">
+    <img class="logo-icon" src="assets/images/logos/fuse.svg">
+    <span class="logo-text">Sked</span>
+  </div>
+
+  <button mat-icon-button class="toggle-sidebar-folded" (click)="toggleSidebarFolded()" fxHide.lt-lg>
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <button mat-icon-button class="toggle-sidebar-opened" (click)="toggleSidebarOpened()" fxHide.gt-md>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+</div>
+
+<div class="navbar-content" perfectScrollBar [perfectScollbarOptions]="{suppressScrollX: true}"
+     [ngClass]="layoutConfig.primaryBackground">
+  <div class="nav vertical">
+    <ng-container [ngTemplateOutlet]="tplNavChildren"
+                  [ngTemplateOutletContext]="{items: navigationItems}"></ng-container>
+  </div>
+</div>
+
+
+<ng-template #itemContent let-item="item">
+  <mat-icon class="nav-link-icon" *ngIf="item.icon">{{item.icon}}</mat-icon>
+  <span class="nav-link-title" [translate]="item.translate">{{item.title}}</span>
+  <span class="nav-link-badge" *ngIf="item.badge" [translate]="item.badge.translate"
+        [ngStyle]="{'background-color': item.badge.bg,'color': item.badge.fg}">
+            {{item.badge.title}}
+        </span>
+  <mat-icon class="collapsable-arrow" *ngIf="item.type == 'collapsible'">keyboard_arrow_right</mat-icon>
+</ng-template>
+
+<ng-template #tplNavChildren let-items="items">
+
+  <ng-container *ngFor="let item of items" [ngSwitch]="item.type">
+    <ng-container [ngTemplateOutlet]="tplNavGroup" *ngSwitchCase="'group'"
+                  [ngTemplateOutletContext]="{item: item}"></ng-container>
+    <ng-container [ngTemplateOutlet]="tplNavCollapsible" *ngSwitchCase="'collapsible'"
+                  [ngTemplateOutletContext]="{item: item}"></ng-container>
+    <ng-container [ngTemplateOutlet]="tplNavItem" *ngSwitchCase="'item'"
+                  [ngTemplateOutletContext]="{item: item}"></ng-container>
+  </ng-container>
+</ng-template>
+
+<ng-template #tplNavItem let-item="item">
+  <ng-container *ngIf="!item.hidden">
+
+    <!-- item.url -->
+    <a class="nav-link" [ngClass]="item.classes" *ngIf="item.url"
+       [routerLink]="[item.url]" [routerLinkActive]="['active', 'accent']"
+       [routerLinkActiveOptions]="{exact: item.exactMatch || false}"
+       [target]="item.openInNewTab ? '_blank' : '_self'">
+      <ng-container [ngTemplateOutlet]="itemContent" [ngTemplateOutletContext]="{item:item}"></ng-container>
+    </a>
+
+    <!-- item.externalUrl -->
+    <a class="nav-link" [ngClass]="item.classes" *ngIf="item.externalUrl"
+       [href]="item.url" target="_blank">
+      <ng-container [ngTemplateOutlet]="itemContent" [ngTemplateOutletContext]="{item:item}"></ng-container>
+    </a>
+
+  </ng-container>
+</ng-template>
+
+
+<ng-template #tplNavCollapsible let-item="item">
+  <ng-container *ngIf="!item.hidden">
+    <div class="nav-collapsable nav-item" [class.open]="isItemExpanded(item)">
+      <a class="nav-link" [ngClass]="item.classes"
+         (click)="toggleExpanded(item, $event)">
+        <ng-container [ngTemplateOutlet]="itemContent" [ngTemplateOutletContext]="{item:item}"></ng-container>
+      </a>
+
+      <div class="children" [@slideInOut]="isItemExpanded(item)">
+        <ng-container [ngTemplateOutlet]="tplNavChildren" [ngTemplateOutletContext]="{items:item.children}"
+                      *ngIf="item.children?.length"></ng-container>
+      </div>
+
+    </div>
+
+  </ng-container>
+
+</ng-template>
+
+<ng-template #tplNavGroup let-item="item">
+  <ng-container *ngIf="!item.hidden">
+    <div class="nav-group nav-item">
+
+      <div class="group-title" [ngClass]="item.classes">
+        <span class="hint-text" [translate]="item.translate">{{ item.title }}</span>
+      </div>
+
+      <div class="group-items">
+        <ng-container [ngTemplateOutlet]="tplNavChildren" [ngTemplateOutletContext]="{items:item.children}"
+                      *ngIf="item.children?.length"></ng-container>
+      </div>
+    </div>
+
+  </ng-container>
+</ng-template>

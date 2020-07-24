@@ -1,0 +1,14 @@
+<div class="page-layout simple" style="overflow: hidden; flex: 1 1 0; display: flex; flex-direction: column">
+  <div class="header accent" fxLayout="row" fxLayoutAlign="space-between center">aaa</div>
+  <div class="content" style="flex:1 1 0; overflow: hidden; display: flex;">
+    <div style="flex:1 1 0; position: relative" [style.overflow]="scrollContent ? 'auto' : 'hidden'">
+      <ng-content></ng-content>
+    </div>
+
+
+
+  </div>
+
+
+
+</div>
