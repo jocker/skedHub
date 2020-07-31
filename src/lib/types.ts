@@ -36,3 +36,5 @@ export function applyDefaults(item: NavigationItem): NavigationItem {
 
   return item
 }
+
+export type DateLike = Date | number

@@ -15,6 +15,10 @@ export function isObject(v: any): boolean {
   return typeof v === 'object';
 }
 
+export function isPlainObject(v: any): boolean {
+  return isObject(v) && v.prototype.constructor === Object.prototype.constructor
+}
+
 export function isString(v: any): boolean {
   return typeof v === 'string' || (v instanceof String)
 }

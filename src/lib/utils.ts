@@ -1,11 +1,11 @@
 import {ElementRef, Type} from "@angular/core";
-import {EMPTY, Observable} from "rxjs";
+import {EMPTY, Observable, Subscription} from "rxjs";
 import {debounceTime, startWith} from "rxjs/operators";
 import ResizeObserver from "resize-observer-polyfill";
-import {Assignable} from "@sked/lib/types";
-import {isPrimitive} from "@sked/lib/type_check_utils";
+import {Assignable, DateLike} from "@sked/lib/types";
+import {isNumber, isPlainObject, isPrimitive} from "@sked/lib/type_check_utils";
 
-export function onElementResize(el: ElementRef, debounce = 100): Observable<ResizeObserverEntry> {
+export function onElementResize(el: ElementRef, debounceMillis = 100): Observable<ResizeObserverEntry> {
 
   if (!el) {
     return EMPTY;
@@ -33,13 +33,30 @@ export function onElementResize(el: ElementRef, debounce = 100): Observable<Resi
 
   return source.pipe(
     startWith(entry),
-    debounceTime(debounce)
+    debounceTime(debounceMillis)
   )
 
 }
 
 export function deepClone<T>(src: T): T {
   return JSON.parse(JSON.stringify(src))
+}
+
+function deepMerge(src: object, dest: object): object {
+  dest = dest || {}
+  for (const key in src) {
+    const v = src[key];
+    if (isPrimitive(v)) {
+      dest[key] = v
+    } else if (!dest.hasOwnProperty(key)) {
+      dest[key] = deepClone(src[key])
+    } else if (isPlainObject(src[key])) {
+      dest[key] = deepMerge(src[key], dest[key])
+    }else{
+      throw new Error('deppmerge cant handle this type')
+    }
+  }
+  return dest
 }
 
 
@@ -184,4 +201,59 @@ export function normalizeWheel(event) /*object*/ {
     pixelY: pY,
     stepSize: Math.abs(pX | pY)
   };
+}
+
+
+export function roundNumber(num: number, precision = 2) {
+  if (num % 1 === 0) {
+    return num
+  }
+  const pow = 10 ** precision
+  return Math.round(num * pow) / pow
+}
+
+
+export function makeDate(d: DateLike): Date {
+  if (isNumber(d)) {
+    return new Date(d)
+  }
+  return d as Date
+}
+
+export function makeTime(d: DateLike): number {
+  if (isNumber(d)) {
+    return d as number
+  }
+  return (d as Date).getTime()
+}
+
+
+export function unsubscribe(subscription: Subscription) {
+  if (subscription && !subscription.closed) {
+    subscription.unsubscribe()
+  }
+}
+
+let textMeasureCanvas: HTMLCanvasElement
+
+export function measureText(text: string, fontSize: string, fontFamily: string): number {
+  if (!textMeasureCanvas) {
+    textMeasureCanvas = document.createElement('canvas') as HTMLCanvasElement;
+  }
+  const context = textMeasureCanvas.getContext('2d');
+  context.font = `${fontSize} ${fontFamily}`;
+
+  return context.measureText(text).width
+}
+
+export function getComputedElementStyle(el: ElementRef | HTMLElement, ...properties: string[]): Map<string, string> {
+  const res = new Map<string, string>()
+  const htmlEl = ((el as ElementRef).nativeElement || el) as HTMLElement;
+  if (htmlEl) {
+    const styles = window.getComputedStyle(htmlEl);
+    for(const prop of properties){
+      res.set(prop, styles.getPropertyValue(prop))
+    }
+  }
+  return res
 }

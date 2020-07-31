@@ -7,7 +7,7 @@
 }
 
 .header_cell {
-  width: 100px;
+  width: 120px;
   height: 20px;
   position: absolute;
   overflow: visible;
@@ -15,8 +15,35 @@
   left: 0;
 
   .title {
-    width: 100px;
-    height: 20px;
-    border: 1px solid red;
+    width: 120px;
+    padding: 8px;
+    border-right: 1px solid red;
   }
+
+}
+
+.header_label{
+  position: absolute;
+  text-align: center;
+  z-index: 1;
+}
+
+
+.event_item{
+  display: flex;
+  position: absolute;
+  flex-direction: row;
+  height: 50px;
+  .title{
+    touch-action: none;
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+
+.grid_line{
+  fill:red
 }

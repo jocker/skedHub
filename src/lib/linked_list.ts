@@ -19,9 +19,14 @@ export class ListNode<T> {
 export class LinkedList<T> {
   first: ListNode<T>
   last: ListNode<T>
+  _size = 0;
 
   constructor(cells?: ListNode<T>[]) {
     this.appendAll(cells)
+  }
+
+  get size(): number{
+    return this._size
   }
 
   get isEmpty(): boolean{
@@ -32,6 +37,10 @@ export class LinkedList<T> {
     if (values) {
       this.appendAll(values.map(value => new ListNode<T>(value)))
     }
+  }
+
+  contains(node: ListNode<T>): boolean{
+    return node.owner === this;
   }
 
   appendAll(nodes?: ListNode<T>[]) {
@@ -54,6 +63,7 @@ export class LinkedList<T> {
       if (!this.first) {
         this.first = nodes[0]
       }
+      this._size += 1
     }
   }
 
@@ -62,7 +72,7 @@ export class LinkedList<T> {
       return false
     }
     node.owner = this;
-
+    this._size += 1
     if (!this.first) {
       this.first = this.last = node
       return
@@ -74,6 +84,7 @@ export class LinkedList<T> {
     node.prev = this.last
 
     this.last = node;
+
     return true
   }
 
@@ -82,7 +93,7 @@ export class LinkedList<T> {
       return false
     }
     node.owner = this;
-
+    this._size += 1
     if (!this.first) {
       this.first = this.last = node
       return
@@ -115,6 +126,7 @@ export class LinkedList<T> {
     node.next = null;
     node.prev = null;
     node.owner = null;
+    this._size -= 1
     return node
   }
 
@@ -138,6 +150,12 @@ export class LinkedList<T> {
       node = node.next
     }
     return values
+  }
+
+  clear(){
+    for(let item = this.first; item; item = this.first){
+      this.remove(item)
+    }
   }
 }
 
@@ -164,5 +182,6 @@ export class ListIterator<T> {
     this.reverse = !!reverse
     this.peekNode = this.reverse ? this.owner.last : this.owner.first
   }
+
 
 }
